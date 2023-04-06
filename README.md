@@ -1,4 +1,4 @@
-### Voice Assistant with GPT-3.5
+# Voice Assistant with GPT-3.5
 This is a voice assistant application that listens for a voice command, transcribes it, generates a response using the OpenAI GPT-3.5 model, and speaks the response using a text-to-speech engine. The application is built using Python and several libraries such as openai, pyttsx3, speech_recognition, pyaudio, and google.
 
 ## Overview
@@ -6,7 +6,7 @@ The voice assistant continuously listens for the keyword "Genius" to start the p
 
 
 ## Class Explanation
-# VoiceAssistant
+### VoiceAssistant
 The VoiceAssistant class is the core class of the application. It contains methods for transcribing audio, generating a response using the GPT-3.5 model, speaking the text using the text-to-speech engine, and recording audio from the user.
 
 Methods in the VoiceAssistant class:
@@ -34,4 +34,4 @@ python chatbot.py
 4. Say "Genius" to start recording your question. The application will transcribe your question, generate a response using the GPT-3.5 model, and speak the response using the text-to-speech engine.
 5. The script will continue listening for the keyword "Genius" to repeat the process.
 
-# Note: Make sure you have a working microphone connected to your computer.
+### Note: Make sure you have a working microphone connected to your computer.
