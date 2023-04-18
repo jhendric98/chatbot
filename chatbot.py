@@ -1,3 +1,4 @@
+# Description: This is a simple chatbot that uses the OpenAI API to generate responses to user questions.
 import openai
 import pyttsx3
 import speech_recognition as sr
@@ -5,8 +6,10 @@ import time
 import pyaudio
 from api_key import API_KEY
 
+
 class VoiceAssistant:
     def __init__(self):
+        """Initialize the voice assistant."""
         self.api_key = API_KEY
         self.openai = openai
         self.openai.api_key = self.api_key
@@ -20,7 +23,7 @@ class VoiceAssistant:
         try:
             return self.recognizer.recognize_google(audio)
         except:
-            print('Skipping unknown error')
+            print("Skipping unknown error")
 
     def generate_response(self, prompt):
         """Generate a response from the GPT-3.5 model using the OpenAI API."""
@@ -45,6 +48,7 @@ class VoiceAssistant:
         return audio
 
     def main(self):
+        """Run the main loop of the voice assistant."""
         while True:
             print("Say 'Genius' to start recording your question")
             with sr.Microphone() as source:
@@ -69,6 +73,7 @@ class VoiceAssistant:
 
                 except Exception as e:
                     print("An error occurred: {}".format(e))
+
 
 if __name__ == "__main__":
     assistant = VoiceAssistant()
