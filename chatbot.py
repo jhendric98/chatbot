@@ -1,20 +1,24 @@
 # Description: This is a simple chatbot that uses the OpenAI API to generate responses to user questions.
 import openai
-import pyttsx3
 import speech_recognition as sr
 import time
 import pyaudio
+
+from gtts import gTTS
+from playsound import playsound
+import os
 from api_key import API_KEY
 
 
 class VoiceAssistant:
+    """A simple voice assistant that uses the OpenAI API to generate responses to user questions."""
+
     def __init__(self):
         """Initialize the voice assistant."""
         self.api_key = API_KEY
         self.openai = openai
         self.openai.api_key = self.api_key
         self.recognizer = sr.Recognizer()
-        self.engine = pyttsx3.init()
 
     def transcribe_audio_to_text(self, filename):
         """Transcribe the audio file to text."""
@@ -28,7 +32,7 @@ class VoiceAssistant:
     def generate_response(self, prompt):
         """Generate a response from the GPT-3.5 model using the OpenAI API."""
         response = self.openai.Completion.create(
-            engine="chatgpt3.5",
+            engine="text-davinci-003",
             prompt=prompt,
             max_tokens=4000,
             n=1,
@@ -38,9 +42,11 @@ class VoiceAssistant:
         return response["choices"][0]["text"]
 
     def speak_text(self, text):
-        """Speak the given text using the text-to-speech engine."""
-        self.engine.say(text)
-        self.engine.runAndWait()
+        """Speak the given text using the gTTS text-to-speech engine."""
+        tts = gTTS(text=text, lang="en", slow=False)
+        tts.save("temp.mp3")
+        playsound("temp.mp3")
+        os.remove("temp.mp3")
 
     def record_audio(self, source):
         """Record audio from the user."""

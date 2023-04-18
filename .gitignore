@@ -1,7 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
-# security files
+# other files
 api_key.py
+*.wav
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
