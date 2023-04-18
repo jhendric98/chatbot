@@ -1,5 +1,5 @@
 openai
-SpeechRecognition
+SpeechRecognition==3.8.1
 pyaudio
 gtts 
 playsound
