@@ -28,27 +28,29 @@ exploring speech recognition, text-to-speech, and large language model integrati
 
 ## Environment setup with `uv`
 
-[`uv`](https://github.com/astral-sh/uv) offers a fast, isolated environment for Python projects. To set up the demo:
+[`uv`](https://github.com/astral-sh/uv) can create an isolated virtual environment and install the dependencies defined in
+`pyproject.toml` in one step. Once `uv` is installed (see the [official installation instructions](https://docs.astral.sh/uv/getting-started/installation/)),
+you can bootstrap the demo with:
 
-1. Install `uv` if it is not already available:
-   ```bash
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   ```
-   On Windows you can use PowerShell:
-   ```powershell
-   powershell -ExecutionPolicy Bypass -File <(iwr https://astral.sh/uv/install.ps1)
-   ```
-2. Create and activate a virtual environment:
-   ```bash
-   uv venv
-   source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
-   ```
-3. Install the project dependencies:
-   ```bash
-   uv pip install -r requirements.txt
-   ```
+```bash
+uv sync
+```
 
-If you prefer `pip`, replace step 3 with `pip install -r requirements.txt`.
+The command creates `.venv/` (if it does not exist yet) and installs both the runtime and development dependencies listed in the
+project metadata. Activate the environment with:
+
+```bash
+source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
+```
+
+To run the assistant without manually activating the virtual environment, leverage `uv run`:
+
+```bash
+uv run python chatbot.py --help
+```
+
+`uv run` automatically ensures the virtual environment is created and up to date before executing the command. If you prefer using
+`pip`, you can still install requirements with `pip install -r requirements.txt` after creating a virtual environment.
 
 ## Configuration
 
@@ -66,6 +68,12 @@ After activating the virtual environment and configuring the API key, launch the
 
 ```bash
 python chatbot.py
+```
+
+When using `uv`, the following shortcut is also available:
+
+```bash
+uv run voice-assistant --once
 ```
 
 By default the assistant listens for the wake word `"genius"`. Speak the keyword, wait for the prompt, and ask your question.

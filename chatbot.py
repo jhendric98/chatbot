@@ -13,8 +13,9 @@ from typing import Optional
 
 import speech_recognition as sr
 from gtts import gTTS
+from gtts.tts import gTTSError
 from openai import OpenAI
-from playsound import playsound
+from playsound import PlaysoundException, playsound
 
 LOGGER = logging.getLogger(__name__)
 
@@ -98,17 +99,21 @@ class VoiceAssistant:
         """Listen until the configured keyword is spoken."""
         LOGGER.debug("Listening for wake word")
         print(f"Say '{self.config.keyword}' to start recording your question...")
-        with sr.Microphone() as source:
-            self._prepare_microphone(source)
-            try:
-                audio = self.recognizer.listen(
-                    source,
-                    timeout=self.config.listen_timeout,
-                    phrase_time_limit=self.config.phrase_time_limit,
-                )
-            except sr.WaitTimeoutError:
-                LOGGER.debug("Keyword listen timed out")
-                return False
+        try:
+            with sr.Microphone() as source:
+                self._prepare_microphone(source)
+                try:
+                    audio = self.recognizer.listen(
+                        source,
+                        timeout=self.config.listen_timeout,
+                        phrase_time_limit=self.config.phrase_time_limit,
+                    )
+                except sr.WaitTimeoutError:
+                    LOGGER.debug("Keyword listen timed out")
+                    return False
+        except OSError as exc:
+            LOGGER.error("Microphone is not available: %s", exc)
+            return False
 
         transcription = self._recognize_speech(audio)
         LOGGER.debug("Wake-word transcription: %s", transcription)
@@ -117,16 +122,19 @@ class VoiceAssistant:
     def _capture_question(self) -> Optional[str]:
         """Record and transcribe the user's question."""
         print("Keyword detected. Ask your question after the tone!")
-        with sr.Microphone() as source:
-            self._prepare_microphone(source)
-            try:
-                audio = self.recognizer.listen(
-                    source,
-                    timeout=self.config.listen_timeout,
-                    phrase_time_limit=self.config.phrase_time_limit,
-                )
-            except sr.WaitTimeoutError as exc:
-                raise RuntimeError("Timed out waiting for a question") from exc
+        try:
+            with sr.Microphone() as source:
+                self._prepare_microphone(source)
+                try:
+                    audio = self.recognizer.listen(
+                        source,
+                        timeout=self.config.listen_timeout,
+                        phrase_time_limit=self.config.phrase_time_limit,
+                    )
+                except sr.WaitTimeoutError as exc:
+                    raise RuntimeError("Timed out waiting for a question") from exc
+        except OSError as exc:
+            raise RuntimeError("Microphone is not available") from exc
 
         return self._recognize_speech(audio)
 
@@ -161,8 +169,16 @@ class VoiceAssistant:
                 {"role": "user", "content": prompt},
             ],
         )
-        message = completion.choices[0].message
-        return message.content or ""
+
+        try:
+            message = completion.choices[0].message
+        except (IndexError, AttributeError) as exc:
+            raise RuntimeError("OpenAI response did not contain any choices") from exc
+
+        if not message or not getattr(message, "content", None):
+            raise RuntimeError("OpenAI returned an empty response")
+
+        return message.content
 
     def speak_text(self, text: str) -> None:
         """Convert text to speech using gTTS and play the generated audio."""
@@ -175,7 +191,14 @@ class VoiceAssistant:
 
         try:
             gTTS(text=text, lang="en", slow=False).save(str(temp_path))
+        except gTTSError as exc:
+            LOGGER.error("Failed to synthesize speech with gTTS: %s", exc)
+            return
+
+        try:
             playsound(str(temp_path))
+        except PlaysoundException as exc:
+            LOGGER.error("Unable to play synthesized speech: %s", exc)
         finally:
             with contextlib.suppress(OSError):
                 temp_path.unlink()
