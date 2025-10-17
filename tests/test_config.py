@@ -1,11 +1,12 @@
 """Tests for AssistantConfig dataclass."""
+
 from voice_assistant import AssistantConfig
 
 
 def test_config_default_values():
     """Test that AssistantConfig has correct default values."""
     config = AssistantConfig()
-    
+
     assert config.keyword == "genius"
     assert config.model == "gpt-3.5-turbo"
     assert config.temperature == 0.7
@@ -28,7 +29,7 @@ def test_config_custom_values():
         listen_timeout=10.0,
         phrase_time_limit=5.0,
     )
-    
+
     assert config.keyword == "hello"
     assert config.model == "gpt-4o"
     assert config.temperature == 1.0
@@ -42,10 +43,9 @@ def test_config_custom_values():
 def test_config_partial_override():
     """Test that AssistantConfig can partially override defaults."""
     config = AssistantConfig(keyword="computer", temperature=0.5)
-    
+
     assert config.keyword == "computer"
     assert config.temperature == 0.5
     # Check that other defaults remain unchanged
     assert config.model == "gpt-3.5-turbo"
     assert config.max_output_tokens == 400
-
