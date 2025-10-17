@@ -83,6 +83,7 @@ voice-assistant-demo/
 ```
 
 **Benefits of this structure:**
+
 - ✅ Clean separation of concerns (assistant, CLI, config)
 - ✅ Installable as a proper Python package
 - ✅ Can be imported and used programmatically
@@ -200,6 +201,7 @@ PortAudio must be installed before setting up the Python dependencies:
    You have two options:
 
    **Option A: Use `uv run` (recommended)**
+
    ```bash
    uv run voice-assistant
    uv run python chatbot.py --help
@@ -207,6 +209,7 @@ PortAudio must be installed before setting up the Python dependencies:
    ```
 
    **Option B: Activate the virtual environment**
+
    ```bash
    source .venv/bin/activate  # macOS/Linux
    .venv\Scripts\activate      # Windows
@@ -336,26 +339,31 @@ python chatbot.py --help
 ### Examples
 
 **Use a different wake word:**
+
 ```bash
 uv run voice-assistant --keyword "hello"
 ```
 
 **Use GPT-4 with higher creativity:**
+
 ```bash
 uv run voice-assistant --model gpt-4o --temperature 1.2
 ```
 
 **Demo mode (single question, then exit):**
+
 ```bash
 uv run voice-assistant --once --log-level DEBUG
 ```
 
 **Adjust for noisy environments:**
+
 ```bash
 uv run voice-assistant --ambient-noise-duration 2.0 --pause-threshold 1.2
 ```
 
 **Run as a Python module:**
+
 ```bash
 uv run python -m voice_assistant --keyword "hello"
 ```
@@ -460,7 +468,7 @@ uv run pytest tests/test_assistant.py::TestGenerateResponse::test_generate_respo
 
 ### Test Structure
 
-```
+```text
 tests/
 ├── __init__.py              # Package marker
 ├── conftest.py             # Shared fixtures and test configuration
@@ -471,6 +479,7 @@ tests/
 ```
 
 Coverage by module:
+
 ```
 Module                          Stmts   Miss  Cover
 --------------------------------------------------
@@ -495,6 +504,7 @@ The test suite currently achieves **79% code coverage** and includes:
 ### Key Testing Features
 
 **Mocked Dependencies**: Tests use mocks for:
+
 - OpenAI API calls (no real API requests)
 - Microphone input (no actual audio recording)
 - Speech recognition (deterministic results)
@@ -503,6 +513,7 @@ The test suite currently achieves **79% code coverage** and includes:
 **Fast Execution**: Full test suite runs in under 1 second
 
 **Fixtures**: Reusable test fixtures in `conftest.py`:
+
 ```python
 mock_recognizer       # Mock speech recognizer
 mock_openai_client    # Mock OpenAI client
@@ -547,7 +558,8 @@ uv run pytest || exit 1
 
 **Problem**: PyAudio installation errors during `pip install` or `uv sync`.
 
-**Solution**: 
+**Solution**:
+
 - Ensure PortAudio is installed (see [Installing PortAudio](#installing-portaudio))
 - On Windows, install [Visual C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 - Try upgrading pip: `pip install --upgrade pip setuptools wheel`
@@ -557,6 +569,7 @@ uv run pytest || exit 1
 **Problem**: The assistant doesn't respond when you say the wake word.
 
 **Solution**:
+
 - Speak clearly and at normal volume
 - Increase calibration time: `--ambient-noise-duration 2.0`
 - Reduce background noise in your environment
@@ -568,17 +581,19 @@ uv run pytest || exit 1
 **Problem**: The assistant hangs or errors when generating a response.
 
 **Solution**:
+
 - Verify your API key is correct: `echo $OPENAI_API_KEY`
 - Check that your OpenAI account has API credits
 - Ensure you have access to the requested model
 - Verify network connectivity
-- Check OpenAI status: https://status.openai.com/
+- Check OpenAI status: <https://status.openai.com/>
 
 ### Audio playback issues
 
 **Problem**: Response is generated but not played aloud.
 
 **Solution**:
+
 - Ensure your system has working audio output
 - Check system volume and audio settings
 - `pygame` mixer may need audio backend configuration on some Linux systems
@@ -589,9 +604,11 @@ uv run pytest || exit 1
 **Problem**: `OSError: Microphone is not available`
 
 **Solution**:
+
 - Ensure a microphone is connected and not in use by other applications
 - Grant microphone permissions to your terminal/Python on macOS/Windows
-- List available devices: 
+- List available devices:
+
   ```python
   import speech_recognition as sr
   print(sr.Microphone.list_microphone_names())
@@ -613,22 +630,28 @@ Contributions are welcome! This codebase is intentionally small so it can be mod
 
 1. Fork the repository
 2. Clone your fork: `git clone https://github.com/yourusername/voice-assistant-demo.git`
-3. Install with dev dependencies: 
+3. Install with dev dependencies:
+
    ```bash
    uv sync  # Installs runtime + dev dependencies
    ```
+
 4. Create a branch: `git checkout -b feature/your-feature-name`
 5. Make your changes
-6. Run linter: 
+6. Run linter:
+
    ```bash
    uv run ruff check .
    uv run ruff format .
    ```
+
 7. Run tests and ensure they pass:
+
    ```bash
    uv run pytest -v
    uv run pytest --cov=chatbot  # Check coverage
    ```
+
 8. Add tests for new features
 9. Commit and push your changes
 10. Open a pull request
