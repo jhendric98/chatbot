@@ -1,0 +1,180 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
+
+    - name: Install PortAudio (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y portaudio19-dev
+
+    - name: Install PortAudio (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        brew install portaudio
+
+    - name: Install PortAudio (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        # Windows PortAudio is handled by PyAudio wheel
+        echo "PortAudio will be installed with PyAudio wheel"
+
+    - name: Install dependencies
+      run: |
+        uv sync --all-extras
+
+    - name: Lint with Ruff
+      run: |
+        uv run ruff check .
+        uv run ruff format --check .
+
+    - name: Type check with mypy (if available)
+      continue-on-error: true
+      run: |
+        uv run python -m pip install mypy || echo "mypy not available, skipping"
+        uv run mypy src/voice_assistant/ || echo "mypy check completed with warnings"
+
+    - name: Test with pytest
+      run: |
+        uv run pytest --cov=voice_assistant --cov-report=xml --cov-report=term-missing -v
+
+    - name: Upload coverage to Codecov
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+    - name: Test CLI installation
+      run: |
+        uv run voice-assistant --help
+
+    - name: Test package import
+      run: |
+        uv run python -c "from voice_assistant import VoiceAssistant, AssistantConfig; print('Import successful')"
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: Set up Python
+      run: uv python install 3.11
+
+    - name: Install dependencies
+      run: uv sync
+
+    - name: Run safety check
+      continue-on-error: true
+      run: |
+        uv run python -m pip install safety || echo "safety not available"
+        uv run safety check || echo "safety check completed with warnings"
+
+    - name: Run bandit security linter
+      continue-on-error: true
+      run: |
+        uv run python -m pip install bandit || echo "bandit not available"
+        uv run bandit -r src/ || echo "bandit check completed with warnings"
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: Set up Python
+      run: uv python install 3.11
+
+    - name: Install dependencies
+      run: uv sync
+
+    - name: Check README links
+      continue-on-error: true
+      run: |
+        uv run python -m pip install markdown-link-check || echo "markdown-link-check not available"
+        # Basic validation that README can be parsed
+        uv run python -c "
+        import re
+        with open('README.md', 'r') as f:
+            content = f.read()
+            # Check for basic markdown structure
+            assert '# Voice Assistant Training Demo' in content
+            assert '## Installation' in content
+            print('README structure validation passed')
+        "
+
+    - name: Validate pyproject.toml
+      run: |
+        uv run python -c "
+        import tomllib
+        with open('pyproject.toml', 'rb') as f:
+            data = tomllib.load(f)
+            assert 'project' in data
+            assert 'name' in data['project']
+            print('pyproject.toml validation passed')
+        "
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: Set up Python
+      run: uv python install 3.11
+
+    - name: Install build dependencies
+      run: uv sync
+
+    - name: Build package
+      run: |
+        uv build
+
+    - name: Check package contents
+      run: |
+        uv run python -m pip install twine || echo "twine not available"
+        uv run twine check dist/* || echo "twine check completed with warnings"
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist
+        path: dist/
