@@ -30,6 +30,8 @@ dependencies = [
     "PyAudio>=0.2.14",
     "gTTS>=2.5.0,<3.0.0",
     "pygame>=2.5.0",
+    "black>=25.9.0",
+    "pylint>=3.3.9",
 ]
 
 [project.optional-dependencies]

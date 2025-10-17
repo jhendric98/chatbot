@@ -1,4 +1,5 @@
 """Pytest configuration and shared fixtures."""
+
 from __future__ import annotations
 
 from unittest.mock import MagicMock, Mock
@@ -21,19 +22,19 @@ def mock_recognizer():
 def mock_openai_client():
     """Create a mock OpenAI client."""
     client = MagicMock()
-    
+
     # Mock the completion response structure
     mock_message = Mock()
     mock_message.content = "This is a test response"
-    
+
     mock_choice = Mock()
     mock_choice.message = mock_message
-    
+
     mock_completion = Mock()
     mock_completion.choices = [mock_choice]
-    
+
     client.chat.completions.create.return_value = mock_completion
-    
+
     return client
 
 
@@ -53,13 +54,13 @@ def voice_assistant(mock_recognizer, assistant_config, monkeypatch):
     """Create a VoiceAssistant instance with mocked dependencies."""
     # Mock the OpenAI API key
     monkeypatch.setenv("OPENAI_API_KEY", "sk-test-key-12345")
-    
+
     assistant = VoiceAssistant(
         api_key="sk-test-key-12345",
         config=assistant_config,
         recognizer=mock_recognizer,
     )
-    
+
     return assistant
 
 
@@ -76,4 +77,3 @@ def mock_microphone():
     mic.__enter__ = Mock(return_value=mic)
     mic.__exit__ = Mock(return_value=False)
     return mic
-

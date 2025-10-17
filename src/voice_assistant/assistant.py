@@ -1,4 +1,5 @@
 """Core voice assistant implementation."""
+
 from __future__ import annotations
 
 import contextlib
@@ -6,7 +7,6 @@ import logging
 import os
 import tempfile
 from pathlib import Path
-from typing import Optional
 
 import pygame
 import speech_recognition as sr
@@ -24,9 +24,9 @@ class VoiceAssistant:
 
     def __init__(
         self,
-        api_key: Optional[str] = None,
-        config: Optional[AssistantConfig] = None,
-        recognizer: Optional[sr.Recognizer] = None,
+        api_key: str | None = None,
+        config: AssistantConfig | None = None,
+        recognizer: sr.Recognizer | None = None,
     ) -> None:
         self.config = config or AssistantConfig()
         self.recognizer = recognizer or sr.Recognizer()
@@ -34,7 +34,7 @@ class VoiceAssistant:
         self.client = OpenAI(api_key=self._resolve_api_key(api_key))
 
     @staticmethod
-    def _resolve_api_key(explicit: Optional[str]) -> str:
+    def _resolve_api_key(explicit: str | None) -> str:
         key = explicit or os.getenv("OPENAI_API_KEY")
         if not key:
             raise RuntimeError(
@@ -44,7 +44,9 @@ class VoiceAssistant:
 
     def run(self, *, once: bool = False) -> None:
         """Start the main interaction loop."""
-        LOGGER.info("Starting voice assistant; waiting for keyword '%s'", self.config.keyword)
+        LOGGER.info(
+            "Starting voice assistant; waiting for keyword '%s'", self.config.keyword
+        )
         try:
             while True:
                 if not self._await_keyword():
@@ -102,9 +104,12 @@ class VoiceAssistant:
 
         transcription = self._recognize_speech(audio)
         LOGGER.debug("Wake-word transcription: %s", transcription)
-        return bool(transcription and transcription.lower().strip() == self.config.keyword.lower())
+        return bool(
+            transcription
+            and transcription.lower().strip() == self.config.keyword.lower()
+        )
 
-    def _capture_question(self) -> Optional[str]:
+    def _capture_question(self) -> str | None:
         """Record and transcribe the user's question."""
         print("Keyword detected. Ask your question after the tone!")
         try:
@@ -125,9 +130,11 @@ class VoiceAssistant:
 
     def _prepare_microphone(self, source: sr.AudioSource) -> None:
         """Calibrate for background noise before recording."""
-        self.recognizer.adjust_for_ambient_noise(source, duration=self.config.ambient_noise_duration)
+        self.recognizer.adjust_for_ambient_noise(
+            source, duration=self.config.ambient_noise_duration
+        )
 
-    def _recognize_speech(self, audio: sr.AudioData) -> Optional[str]:
+    def _recognize_speech(self, audio: sr.AudioData) -> str | None:
         """Transcribe recorded audio with Google's speech recognition service."""
         try:
             return self.recognizer.recognize_google(audio)
@@ -171,7 +178,9 @@ class VoiceAssistant:
             LOGGER.debug("Skipping empty response")
             return
 
-        with tempfile.NamedTemporaryFile(prefix="assistant_", suffix=".mp3", delete=False) as temp_file:
+        with tempfile.NamedTemporaryFile(
+            prefix="assistant_", suffix=".mp3", delete=False
+        ) as temp_file:
             temp_path = Path(temp_file.name)
 
         try:
@@ -201,4 +210,3 @@ class VoiceAssistant:
             # Clean up the temporary file
             with contextlib.suppress(OSError):
                 temp_path.unlink()
-

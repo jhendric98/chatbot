@@ -1,8 +1,8 @@
 """Configuration for the voice assistant."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -15,6 +15,5 @@ class AssistantConfig:
     max_output_tokens: int = 400
     pause_threshold: float = 0.8
     ambient_noise_duration: float = 0.5
-    listen_timeout: Optional[float] = None
-    phrase_time_limit: Optional[float] = None
-
+    listen_timeout: float | None = None
+    phrase_time_limit: float | None = None
