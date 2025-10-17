@@ -82,6 +82,7 @@ Unsure where to begin? Look for issues labeled:
 ### Pull Requests
 
 1. **Fork the repository** and create your branch from `main`:
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -91,11 +92,13 @@ Unsure where to begin? Look for issues labeled:
 3. **Add tests** for new features or bug fixes
 
 4. **Ensure tests pass**:
+
    ```bash
    uv run pytest -v
    ```
 
 5. **Run the linter**:
+
    ```bash
    uv run ruff check .
    uv run ruff format .
@@ -120,28 +123,33 @@ Unsure where to begin? Look for issues labeled:
 ### Setup Steps
 
 1. **Install uv** (recommended):
+
    ```bash
    curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
 
 2. **Clone your fork**:
+
    ```bash
    git clone https://github.com/yourusername/voice-assistant-demo.git
    cd voice-assistant-demo
    ```
 
 3. **Install dependencies** (includes dev tools):
+
    ```bash
    uv sync
    ```
 
 4. **Verify installation**:
+
    ```bash
    uv run pytest -v
    uv run voice-assistant --help
    ```
 
 5. **Set up pre-commit hooks** (optional but recommended):
+
    ```bash
    cat > .git/hooks/pre-commit << 'EOF'
    #!/bin/sh
@@ -174,14 +182,14 @@ Unsure where to begin? Look for issues labeled:
 
 **Examples:**
 
-```
+```text
 ✨ Add support for custom wake word phrases
 
 Allows users to specify multi-word wake phrases instead of single words.
 Closes #42
 ```
 
-```
+```text
 🐛 Fix microphone initialization on Windows
 
 The microphone wasn't being properly released, causing errors on subsequent runs.
@@ -255,6 +263,7 @@ uv run ruff format .
 ### Writing Tests
 
 1. **Use descriptive test names**:
+
    ```python
    def test_generate_response_handles_api_timeout():
        """Test that API timeouts are handled gracefully."""
@@ -262,6 +271,7 @@ uv run ruff format .
    ```
 
 2. **Follow AAA pattern** (Arrange, Act, Assert):
+
    ```python
    def test_wake_word_detection():
        # Arrange
@@ -348,4 +358,3 @@ Remember: **This is a learning project.** We value:
 Thank you for contributing to Voice Assistant Demo! 🎉
 
 Your contributions help make this a better learning resource for everyone.
-

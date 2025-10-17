@@ -1,7 +1,5 @@
 # Voice Assistant Training Demo
 
-<div align="center">
-
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
@@ -16,8 +14,6 @@ A microphone-driven assistant that listens for a configurable wake word, records
 [Installation](#installation) •
 [Usage](#usage) •
 [Configuration](#configuration)
-
-</div>
 
 ---
 
@@ -61,7 +57,7 @@ Perfect for workshops, demonstrations, and learning how to build voice-enabled a
 
 This project follows Python packaging best practices with a clean `src/` layout:
 
-```
+```text
 voice-assistant-demo/
 ├── src/
 │   └── voice_assistant/          # Main package
@@ -480,7 +476,7 @@ tests/
 
 Coverage by module:
 
-```
+```text
 Module                          Stmts   Miss  Cover
 --------------------------------------------------
 src/voice_assistant/__init__.py     4      0   100%
@@ -672,7 +668,7 @@ For major changes, please open an issue first to discuss what you would like to 
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-```
+```text
 MIT License
 
 Copyright (c) 2025 Voice Assistant Maintainers
@@ -712,10 +708,6 @@ Special thanks to the Astral team for creating `uv` and `ruff`, and to all contr
 
 ---
 
-<div align="center">
-
 **[⬆ Back to Top](#voice-assistant-training-demo)**
 
 Made with ❤️ for learning and exploration
-
-</div>

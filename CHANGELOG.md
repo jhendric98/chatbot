@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+### Added in Unreleased
 
 - Professional repository documentation (CHANGELOG, CONTRIBUTING, CODE_OF_CONDUCT)
 - GitHub issue and pull request templates
@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2025-10-17
 
-### Added
+### Added in 0.1.0
 
 - Complete refactor to Python packaging best practices with `src/` layout
 - Structured package with proper `__init__.py`, `__main__.py`, and modular design
@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Development dependencies and tooling (pytest, ruff, pytest-cov)
 - Locked dependencies with `uv.lock` for reproducibility
 
-### Changed
+### Changed in 0.1.0
 
 - Migrated from single-file script to proper Python package
 - Improved configuration with dedicated `AssistantConfig` dataclass
@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated README with extensive documentation
 - Better error handling and logging throughout
 
-### Fixed
+### Fixed in 0.1.0
 
 - Audio processing reliability improvements
 - Wake word detection accuracy
@@ -46,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.2] - 2025-09-28
 
-### Added
+### Added in 0.0.2
 
 - UV project configuration for fast dependency management
 - Professional README with comprehensive documentation
@@ -55,20 +55,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Troubleshooting section
 - SECURITY.md file with security policy
 
-### Changed
+### Changed in 0.0.2
 
 - Hardened voice assistant implementation
 - Improved error handling and resilience
 - Updated dependencies to latest stable versions
 
-### Fixed
+### Fixed in 0.0.2
 
 - Speech recognition output issues with Google Speech Recognition API
 - Audio encoder compatibility problems
 
 ## [0.0.1] - 2023-04-18
 
-### Added
+### Added in 0.0.1
 
 - Initial voice assistant implementation
 - Wake word detection using speech recognition
@@ -79,14 +79,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Requirements.txt for dependency management
 - Initial README documentation
 
-### Fixed
+### Fixed in 0.0.1
 
 - Speech encoder compatibility (migrated to Google Speech Recognition)
 - Audio playback issues
 
 ## [0.0.0] - 2023-04-05
 
-### Added
+### Added in 0.0.0
 
 - Initial project setup
 - Basic project structure
