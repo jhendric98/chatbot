@@ -3,6 +3,10 @@
 # other files
 api_key.py
 *.wav
+*.mp3
+
+# UV specific
+.python-version-*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -78,8 +82,8 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# pyenv
-.python-version
+# pyenv - Note: .python-version is NOT ignored for UV support
+# .python-version
 
 # celery beat schedule file
 celerybeat-schedule
